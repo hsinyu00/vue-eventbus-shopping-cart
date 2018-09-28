@@ -4,7 +4,7 @@
         <p>{{ id }}</p>
         <p>{{ name }}</p>
         <p>{{ price }}</p>
-        <button class="add-to-cart" data-id="id" @click="addToCart(item)">Add to cart</button>
+        <button class="add-to-cart" data-id="id" @click="childAddToCart">Add to cart</button>
     </div>
 </template>
 
@@ -26,6 +26,11 @@ export default {
         image: {
             type: String,
             required: true
+        }
+    },
+    methods: {
+        childAddToCart() {
+            this.$emit('add-to-cart')
         }
     }
 }

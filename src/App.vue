@@ -8,7 +8,7 @@
                 :price="item.price"
                 :image="item.image"
                 v-for="item in products"
-                :key="item.id">
+                :key="item.id" @add-to-cart="addToCart(item.id)">
             </Product>
         </div>
         <h2>My Shopping Cart</h2>
@@ -50,7 +50,6 @@ import CartItem from '@/components/CartItem'
 import Product from '@/components/Product'
 
 export default {
-let bus = new Vue()
 data() {
     return {
         products: null,
@@ -69,40 +68,32 @@ methods: {
             this.products = res.products
         })
     },
-    addToCart(item) {
-        if(data.cart.length > 0) {
+    addToCart(id) {
+        if(this.cart.length > 0) {
             let inCart = false
             // 逐條比對是否已有此商品
-            for (i = 0; i < data.cart.length; i++) {
-                if (data.cart[i].id === item.id) {
+            for (i = 0; i < this.cart.length; i++) {
+                if (this.cart[i].id === id) {
                     inCart = true;  // in cart 就不要再跑迴圈，否則會把不是這一回合的也加上去
-                    data.cart[i].qty = data.cart[i].qty + 1
+                    this.cart[i].qty = this.cart[i].qty + 1
                     break
                 }
             }
             if(!inCart) {
-                let newItem = {
-                    "id": item.id,
-                    "name": item.name,
-                    "price": item.price,
-                    "qty": 1
-                }
-                data.cart.push(newItem)
+                let newItem = this.products.find(function (obj) { return obj.id === id; });
+                newItem.qty = 1
+                this.cart.push(newItem)
             }
         } else {
-            let newItem = {
-                "id": item.id,
-                "name":  item.name,
-                "price":  item.price,
-                "qty": 1
-            }
-            data.cart.push(newItem)
+            let newItem = this.products.find(function (obj) { return obj.id === id; });
+            newItem.qty = 1
+            this.cart.push(newItem)
         }
-        this.updateStorage()
+        // this.updateStorage()
     },
     emptyCart() {
         this.cart = []
-        this.updateStorage()
+        // this.updateStorage()
     },
     updateStorage() {
         localStorage['cart'] = JSON.stringify(this.cart)
