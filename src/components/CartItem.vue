@@ -4,12 +4,12 @@
         <td class="name">{{ name }}</td>
         <td class="price">{{ price }}</td>
         <td class="qty">
-            <button @click="decrease(id)"> - </button>
+            <button @click="childDecrease"> - </button>
             {{ qty }}
-            <button @click="increase(id)"> + </button>
+            <button @click="childIncrease"> + </button>
         </td>
         <td class="sub">{{ qty * price }}</td>
-        <td><span class="del" @click="removeFromCart(id)"><img src="images/trash.gif"></span></td>
+        <td><span class="del" @click="childRemoveFromCart"><img src="images/trash.gif"></span></td>
     </tr>
 </template>
 
@@ -34,30 +34,14 @@ export default {
         }
     },
     methods: {
-        removeFromCart(id) {
-            if (confirm("Delete this item?")) {
-                let target = data.cart.findIndex(function (obj, idx, ary) {
-                    return obj.id === id
-                })
-                data.cart.splice(target, 1)
-                vm.updateStorage()
-            }
+        childRemoveFromCart() {
+            this.$emit('remove-from-cart')
         },
-        decrease(id) {
-            let target = data.cart.findIndex(function (obj, idx, ary) {
-                return obj.id === id
-            })
-            if (data.cart[target].qty > 1) {
-                data.cart[target].qty = data.cart[target].qty - 1
-            }
-            vm.updateStorage()
+        childDecrease() {
+            this.$emit('item-decrease')
         },
-        increase(id) {
-            let target = data.cart.findIndex(function (obj, idx, ary) {
-                return obj.id === id
-            })
-            data.cart[target].qty = data.cart[target].qty + 1
-            vm.updateStorage()
+        childIncrease() {
+            this.$emit('item-increase')
         }
     }
 }

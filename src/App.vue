@@ -25,12 +25,15 @@
                     </tr>
                     <!-- 這邊要用 is，否則 component 會被踢到 <table> 外面
                      https://cn.vuejs.org/v2/guide/components.html#%E8%A7%A3%E6%9E%90-DOM-%E6%A8%A1%E6%9D%BF%E6%97%B6%E7%9A%84%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9 -->
-                    <tr is="cart-item" v-for="(item) in cart"
+                    <tr is="cart-item" v-for="item in cart"
                             :key="item.src"
                             :id="item.id"
                             :name="item.name"
                             :price="item.price"
-                            :qty="item.qty">
+                            :qty="item.qty"
+                            @item-decrease="decrease(item.id)"
+                            @item-increase="increase(item.id)"
+                            @remove-from-cart="removeFromCart(item.id)">
                     </tr>
                     <tr>
                         <td colspan="6">Total: {{ total }}</td>
@@ -72,7 +75,7 @@ methods: {
         if(this.cart.length > 0) {
             let inCart = false
             // 逐條比對是否已有此商品
-            for (i = 0; i < this.cart.length; i++) {
+            for (let i = 0; i < this.cart.length; i++) {
                 if (this.cart[i].id === id) {
                     inCart = true;  // in cart 就不要再跑迴圈，否則會把不是這一回合的也加上去
                     this.cart[i].qty = this.cart[i].qty + 1
@@ -90,6 +93,27 @@ methods: {
             this.cart.push(newItem)
         }
         // this.updateStorage()
+    },
+    removeFromCart(id) {
+        if (confirm("Delete this item?")) {
+            // https://gist.github.com/scottopolis/6e35cf0d53bae81e6161662e6374da04
+            let target = this.cart.map(function(item) { return item.id; }).indexOf(id)
+            this.cart.splice(target, 1);
+            // vm.updateStorage()
+        }
+    },
+    decrease(id) {
+        let target = this.cart.map(function(item) { return item.id; }).indexOf(id)
+        if (this.cart[target].qty > 1) {
+            this.cart[target].qty = this.cart[target].qty - 1
+        }
+        // vm.updateStorage()
+    },
+    increase(id) {
+        let target = this.cart.map(function(item) { return item.id; }).indexOf(id)
+        console.log(id,target)
+        this.cart[target].qty = this.cart[target].qty + 1
+        // vm.updateStorage()
     },
     emptyCart() {
         this.cart = []
