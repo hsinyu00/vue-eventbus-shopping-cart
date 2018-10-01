@@ -48,11 +48,13 @@
 
 <script>
 
+import Vue from 'vue'
 import axios from 'axios'
 import CartItem from '@/components/CartItem'
 import Product from '@/components/Product'
 
 export default {
+
 data() {
     return {
         products: null,
@@ -76,6 +78,7 @@ methods: {
             let target = this.cart.map(function(item) { return item.id; }).indexOf(id)
             if (target >= 0) { // cart 裡已有此項
                 this.cart[target].qty = this.cart[target].qty + 1
+                Vue.set(this.cart, target, this.cart[target])
             } else {
                 let newItem = this.products.find(function (obj) { return obj.id === id })
                 newItem.qty = 1
@@ -100,12 +103,15 @@ methods: {
         let target = this.cart.map(function(item) { return item.id; }).indexOf(id)
         if (this.cart[target].qty > 1) {
             this.cart[target].qty = this.cart[target].qty - 1
+            Vue.set(this.cart, target, this.cart[target])
         }
         // vm.updateStorage()
     },
     increase(id) {
         let target = this.cart.map(function(item) { return item.id; }).indexOf(id)
         this.cart[target].qty = this.cart[target].qty + 1
+        Vue.set(this.cart, target, this.cart[target])
+
         // vm.updateStorage()
     },
     emptyCart() {
