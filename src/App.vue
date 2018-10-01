@@ -89,14 +89,14 @@ methods: {
             newItem.qty = 1
             this.cart.push(newItem)
         }
-        // this.updateStorage()
+        this.updateStorage()
     },
     removeFromCart(id) {
         if (confirm("Delete this item?")) {
             // https://gist.github.com/scottopolis/6e35cf0d53bae81e6161662e6374da04
             let target = this.cart.map(function(item) { return item.id; }).indexOf(id)
             this.cart.splice(target, 1)
-            // vm.updateStorage()
+            this.updateStorage()
         }
     },
     decrease(id) {
@@ -105,18 +105,18 @@ methods: {
             this.cart[target].qty = this.cart[target].qty - 1
             Vue.set(this.cart, target, this.cart[target])
         }
-        // vm.updateStorage()
+        this.updateStorage()
     },
     increase(id) {
         let target = this.cart.map(function(item) { return item.id; }).indexOf(id)
         this.cart[target].qty = this.cart[target].qty + 1
         Vue.set(this.cart, target, this.cart[target])
 
-        // vm.updateStorage()
+        this.updateStorage()
     },
     emptyCart() {
         this.cart = []
-        // this.updateStorage()
+        this.updateStorage()
     },
     updateStorage() {
         localStorage['cart'] = JSON.stringify(this.cart)
@@ -139,7 +139,9 @@ components: {
 },
 created() {
     this.loadProducts()
-    // this.cart = JSON.parse(localStorage['cart']) || []
+    if(localStorage['cart']) {
+        this.cart = this.cart.concat(JSON.parse(localStorage['cart']))
+    }
 }
 }
 
