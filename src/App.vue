@@ -73,22 +73,16 @@ methods: {
     },
     addToCart(id) {
         if(this.cart.length > 0) {
-            let inCart = false
-            // 逐條比對是否已有此商品
-            for (let i = 0; i < this.cart.length; i++) {
-                if (this.cart[i].id === id) {
-                    inCart = true;  // in cart 就不要再跑迴圈，否則會把不是這一回合的也加上去
-                    this.cart[i].qty = this.cart[i].qty + 1
-                    break
-                }
-            }
-            if(!inCart) {
-                let newItem = this.products.find(function (obj) { return obj.id === id; });
+            let target = this.cart.map(function(item) { return item.id; }).indexOf(id)
+            if (target >= 0) { // cart 裡已有此項
+                this.cart[target].qty = this.cart[target].qty + 1
+            } else {
+                let newItem = this.products.find(function (obj) { return obj.id === id })
                 newItem.qty = 1
                 this.cart.push(newItem)
             }
         } else {
-            let newItem = this.products.find(function (obj) { return obj.id === id; });
+            let newItem = this.products.find(function (obj) { return obj.id === id })
             newItem.qty = 1
             this.cart.push(newItem)
         }
@@ -98,7 +92,7 @@ methods: {
         if (confirm("Delete this item?")) {
             // https://gist.github.com/scottopolis/6e35cf0d53bae81e6161662e6374da04
             let target = this.cart.map(function(item) { return item.id; }).indexOf(id)
-            this.cart.splice(target, 1);
+            this.cart.splice(target, 1)
             // vm.updateStorage()
         }
     },
@@ -111,7 +105,6 @@ methods: {
     },
     increase(id) {
         let target = this.cart.map(function(item) { return item.id; }).indexOf(id)
-        console.log(id,target)
         this.cart[target].qty = this.cart[target].qty + 1
         // vm.updateStorage()
     },
