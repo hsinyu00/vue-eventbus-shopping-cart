@@ -4,16 +4,17 @@
         <td class="name">{{ name }}</td>
         <td class="price">{{ price }}</td>
         <td class="qty">
-            <button @click="childDecrease"> - </button>
+            <button @click="childDecrease(id)"> - </button>
             {{ qty }}
-            <button @click="childIncrease"> + </button>
+            <button @click="childIncrease(id)"> + </button>
         </td>
         <td class="sub">{{ qty * price }}</td>
-        <td><span class="del" @click="childRemoveFromCart"><img src="images/trash.gif"></span></td>
+        <td><span class="del" @click="childRemoveFromCart(id)"><img src="images/trash.gif"></span></td>
     </tr>
 </template>
 
 <script>
+import { bus } from '../main'
 export default {
     props: {
         id: {
@@ -34,14 +35,14 @@ export default {
         }
     },
     methods: {
-        childRemoveFromCart() {
-            this.$emit('remove-from-cart')
+        childRemoveFromCart(id) {
+            bus.$emit('remove-from-cart', id)
         },
-        childDecrease() {
-            this.$emit('item-decrease')
+        childDecrease(id) {
+            bus.$emit('item-decrease', id)
         },
-        childIncrease() {
-            this.$emit('item-increase')
+        childIncrease(id) {
+            bus.$emit('item-increase', id)
         }
     }
 }

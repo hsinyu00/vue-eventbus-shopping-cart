@@ -4,11 +4,12 @@
         <p>{{ id }}</p>
         <p>{{ name }}</p>
         <p>{{ price }}</p>
-        <button class="add-to-cart" data-id="id" @click="childAddToCart">Add to cart</button>
+        <button class="add-to-cart" data-id="id" @click="childAddToCart(id)">Add to cart</button>
     </div>
 </template>
 
 <script>
+import { bus } from '../main'
 export default {
     props: {
         id: {
@@ -29,8 +30,8 @@ export default {
         }
     },
     methods: {
-        childAddToCart() {
-            this.$emit('add-to-cart')
+        childAddToCart(id) {
+            bus.$emit('add-to-cart', id)
         }
     }
 }

@@ -50,6 +50,7 @@
 
 import Vue from 'vue'
 import axios from 'axios'
+import { bus } from '@/main'
 import CartItem from '@/components/CartItem'
 import Product from '@/components/Product'
 
@@ -124,13 +125,17 @@ methods: {
 },
 computed: {
     total() {
-        let total = this.cart.map(function(obj) {
-            let sub = obj.price * obj.qty
-            return sub
-        }).reduce(function(result, sub) {
-            return result + sub
-        })
-        return total
+        if(this.cart.length > 0) {
+            let total = this.cart.map(function(obj) {
+                let sub = obj.price * obj.qty
+                return sub
+            }).reduce(function(result, sub) {
+                return result + sub
+            })
+            return total
+        } else {
+            return 0
+        }
     }
 },
 components: {
@@ -139,6 +144,10 @@ components: {
 },
 created() {
     this.loadProducts()
+    bus.$on('add-to-cart', this.addToCart)
+    bus.$on('remove-from-cart', this.removeFromCart)
+    bus.$on('item-increase', this.increase)
+    bus.$on('item-decrease', this.decrease)
     if(localStorage['cart']) {
         this.cart = this.cart.concat(JSON.parse(localStorage['cart']))
     }
