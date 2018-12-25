@@ -32,10 +32,10 @@
 </template>
 
 <script>
-import {mapActions} from 'vuex'
+import {mapMutations} from 'vuex'
 export default {
     computed: {
-        cart(){
+        cart() {
             return this.$store.state.cart;
         },
         total() {
@@ -43,11 +43,18 @@ export default {
         }
     },
     methods: {
-        ...mapActions([
-            'decrease',
-            'increase',
-            'removeFromCart'
-        ])
+        decrease(id) {
+            this.$store.commit('decrease', id)
+            this.$store.commit('updateTotal')
+        },
+        increase(id) {
+            this.$store.commit('increase', id)
+            this.$store.commit('updateTotal')
+        },
+        removeFromCart(id) {
+            this.$store.commit('removeFromCart', id)
+            this.$store.commit('updateTotal')
+        }
     }
 }
 </script>

@@ -4,7 +4,7 @@
         <products></products>
         <h2>My Shopping Cart</h2>
         <cart></cart>
-        <!-- <button id="emptyCart" @click="emptyCart">clear cart</button> -->
+        <button id="emptyCart" @click="emptyCart">clear cart</button>
     </div>
 </template>
 
@@ -14,14 +14,19 @@ import Vue from 'vue'
 import axios from 'axios'
 import CartItem from '@/components/CartItem'
 import Product from '@/components/Product'
-import {mapGetters} from 'vuex';
-import {mapActions} from 'vuex';
+import {mapMutations} from 'vuex'
 
 export default {
-
-methods: {
-
-},
+    computed: {
+        total(){
+            return this.$store.state.total;
+        }
+    },
+    methods: {
+        emptyCart() {
+            this.$store.commit('emptyCart')
+        }
+    },
 
 // methods: {
 

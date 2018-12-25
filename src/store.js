@@ -7,10 +7,8 @@ Vue.use(Vuex)
 export const store = new Vuex.Store({
   state: {
     products: [],
-    cart: []
-  },
-  getter: {
-    getProducts: (state) => state.products
+    cart: [],
+    total: 0
   },
   mutations: {
     addToCart(state, id) {
@@ -25,46 +23,52 @@ export const store = new Vuex.Store({
               state.cart.push(newItem)
           }
       } else {
-          let newItem = state.products.find(function (obj) { return obj.id === id })
-          newItem.qty = 1
-          state.cart.push(newItem)
+        let newItem = state.products.find(function (obj) { return obj.id === id })
+        newItem.qty = 1
+        state.cart.push(newItem)
       }
       // state.updateStorage()
     },
     removeFromCart(state, id) {
-      if (confirm("Delete this item?")) {
+      if(state.cart.length > 0) {
+        if (confirm("Delete this item?")) {
           // https://gist.github.com/scottopolis/6e35cf0d53bae81e6161662e6374da04
           let target = state.cart.map(function(item) { return item.id; }).indexOf(id)
           state.cart.splice(target, 1)
-          state.updateStorage()
+          // state.updateStorage()
+        }
       }
     },
     decrease(state, id) {
-        let target = state.cart.map(function(item) { return item.id; }).indexOf(id)
-        if (state.cart[target].qty > 1) {
-            state.cart[target].qty = state.cart[target].qty - 1
-            Vue.set(state.cart, target, state.cart[target])
-        }
-        state.updateStorage()
+      let target = state.cart.map(function(item) { return item.id; }).indexOf(id)
+      if (state.cart[target].qty > 1) {
+          state.cart[target].qty = state.cart[target].qty - 1
+          Vue.set(state.cart, target, state.cart[target])
+      }
+      // state.updateStorage()
     },
     increase(state, id) {
-        let target = state.cart.map(function(item) { return item.id; }).indexOf(id)
-        state.cart[target].qty = state.cart[target].qty + 1
-        Vue.set(state.cart, target, state.cart[target])
+      let target = state.cart.map(function(item) { return item.id; }).indexOf(id)
+      state.cart[target].qty = state.cart[target].qty + 1
+      Vue.set(state.cart, target, state.cart[target])
 
-        state.updateStorage()
+      // state.updateStorage()
     },
-    total() {
+    updateTotal(state) {
       if(state.cart.length > 0) {
-          let total = state.cart.map(function(obj) {
-              let sub = obj.price * obj.qty
-              return sub
-          }).reduce(function(result, sub) {
-              return result + sub
-          })
-          return total
-      } else {
-          return 0
+        let total = state.cart.map(function(obj) {
+            let sub = obj.price * obj.qty
+            return sub
+        }).reduce(function(result, sub) {
+            return result + sub
+        })
+        state.total = total
+      }
+    },
+    emptyCart(state) {
+      if (confirm("Empty cart?")) {
+        state.cart = []
+        // this.updateStorage()
       }
     },
     loadSuccess(state, data) {

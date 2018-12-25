@@ -11,7 +11,6 @@
 </template>
 
 <script>
-import {mapActions} from 'vuex'
 
 export default {
     computed: {
@@ -22,6 +21,7 @@ export default {
     methods: {
         addToCart(id) {
             this.$store.commit('addToCart', id)
+            this.$store.commit('updateTotal')
         }
     }
 }
