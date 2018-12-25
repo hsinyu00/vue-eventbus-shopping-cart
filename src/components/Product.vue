@@ -1,37 +1,27 @@
 <template>
-    <div class="item">
-        <img :src="image" class="prod-img">
-        <p>{{ id }}</p>
-        <p>{{ name }}</p>
-        <p>{{ price }}</p>
-        <button class="add-to-cart" data-id="id" @click="childAddToCart(id)">Add to cart</button>
+    <div id="products">
+        <div class="item" v-for="item in products">
+            <img :src="item.image" class="prod-img">
+            <p>{{ item.id }}</p>
+            <p>{{ item.name }}</p>
+            <p>{{ item.price }}</p>
+            <button class="add-to-cart" data-id="item.id" @click="addToCart(item.id)">Add to cart</button>
+        </div>
     </div>
 </template>
 
 <script>
-import { bus } from '../main'
+import {mapActions} from 'vuex'
+
 export default {
-    props: {
-        id: {
-            type: String,
-            required: true
-        },
-        name: {
-            type: String,
-            required: true
-        },
-        price: {
-            type: Number,
-            required: true
-        },
-        image: {
-            type: String,
-            required: true
+    computed: {
+        products(){
+            return this.$store.state.products;
         }
     },
     methods: {
-        childAddToCart(id) {
-            bus.$emit('add-to-cart', id)
+        addToCart(id) {
+            this.$store.commit('addToCart', id)
         }
     }
 }

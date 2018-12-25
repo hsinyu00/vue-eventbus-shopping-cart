@@ -1,49 +1,53 @@
 <template>
-    <tr :data-id="id">
-        <td class="id">{{ id }}</td>
-        <td class="name">{{ name }}</td>
-        <td class="price">{{ price }}</td>
-        <td class="qty">
-            <button @click="childDecrease(id)"> - </button>
-            {{ qty }}
-            <button @click="childIncrease(id)"> + </button>
-        </td>
-        <td class="sub">{{ qty * price }}</td>
-        <td><span class="del" @click="childRemoveFromCart(id)"><img src="images/trash.gif"></span></td>
-    </tr>
+<div id="cart">
+<div v-if="cart.length > 0">
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Product Name</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Subtotal</th>
+            <th>Del</th>
+        </tr>
+        <tr v-for="item in cart">
+            <td class="id">{{ item.id }}</td>
+            <td class="name">{{ item.name }}</td>
+            <td class="price">{{ item.price }}</td>
+            <td class="qty">
+                <button @click="decrease(item.id)"> - </button>
+                {{ item.qty }}
+                <button @click="increase(item.id)"> + </button>
+            </td>
+            <td class="sub">{{ item.qty * item.price }}</td>
+            <td><span class="del" @click="removeFromCart(item.id)"><img src="images/trash.gif"></span></td>
+        </tr>
+        <tr>
+            <td colspan="6">Total: {{ total }}</td>
+        </tr>
+    </table>
+</div>
+<div v-else>No item in cart.</div>
+</div>
 </template>
 
 <script>
-import { bus } from '../main'
+import {mapActions} from 'vuex'
 export default {
-    props: {
-        id: {
-            type: String,
-            required: true
+    computed: {
+        cart(){
+            return this.$store.state.cart;
         },
-        name: {
-            type: String,
-            required: true
-        },
-        price: {
-            type: Number,
-            required: true
-        },
-        qty: {
-            type: Number,
-            required: true
+        total() {
+            return this.$store.state.total;
         }
     },
     methods: {
-        childRemoveFromCart(id) {
-            bus.$emit('remove-from-cart', id)
-        },
-        childDecrease(id) {
-            bus.$emit('item-decrease', id)
-        },
-        childIncrease(id) {
-            bus.$emit('item-increase', id)
-        }
+        ...mapActions([
+            'decrease',
+            'increase',
+            'removeFromCart'
+        ])
     }
 }
 </script>
