@@ -27,7 +27,6 @@ export const store = new Vuex.Store({
         newItem.qty = 1
         state.cart.push(newItem)
       }
-      // state.updateStorage()
     },
     removeFromCart(state, id) {
       if(state.cart.length > 0) {
@@ -35,7 +34,6 @@ export const store = new Vuex.Store({
           // https://gist.github.com/scottopolis/6e35cf0d53bae81e6161662e6374da04
           let target = state.cart.map(function(item) { return item.id; }).indexOf(id)
           state.cart.splice(target, 1)
-          // state.updateStorage()
         }
       }
     },
@@ -45,14 +43,11 @@ export const store = new Vuex.Store({
           state.cart[target].qty = state.cart[target].qty - 1
           Vue.set(state.cart, target, state.cart[target])
       }
-      // state.updateStorage()
     },
     increase(state, id) {
       let target = state.cart.map(function(item) { return item.id; }).indexOf(id)
       state.cart[target].qty = state.cart[target].qty + 1
       Vue.set(state.cart, target, state.cart[target])
-
-      // state.updateStorage()
     },
     updateTotal(state) {
       if(state.cart.length > 0) {
@@ -65,14 +60,19 @@ export const store = new Vuex.Store({
         state.total = total
       }
     },
+    updateStorage(state) {
+      localStorage['cart'] = JSON.stringify(state.cart)
+    },
     emptyCart(state) {
       if (confirm("Empty cart?")) {
         state.cart = []
-        // this.updateStorage()
       }
     },
     loadSuccess(state, data) {
       state.products = data
+    },
+    recoverCart(state) {
+      state.cart = JSON.parse(localStorage['cart'])
     }
   },
   actions: {
