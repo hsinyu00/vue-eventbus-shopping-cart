@@ -14,17 +14,12 @@ import Vue from 'vue'
 import axios from 'axios'
 import CartItem from '@/components/CartItem'
 import Product from '@/components/Product'
-import {mapMutations} from 'vuex'
 
 export default {
-    computed: {
-        total(){
-            return this.$store.state.total;
-        }
-    },
     methods: {
         emptyCart() {
             this.$store.commit('emptyCart')
+            this.$store.commit('updateStorage')
         }
     },
     components: {
@@ -33,7 +28,7 @@ export default {
     },
     created() {
         this.$store.dispatch('loadProducts')
-        this.$store.commit('recoverCart')
+        this.$store.commit('loadCart')
     }
 }
 

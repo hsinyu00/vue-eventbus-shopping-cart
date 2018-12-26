@@ -39,21 +39,21 @@ export default {
             return this.$store.state.cart;
         },
         total() {
-            return this.$store.state.total;
+            return this.$store.getters.updateTotal;
         }
     },
     methods: {
         decrease(id) {
             this.$store.commit('decrease', id)
-            this.$store.commit('updateTotal')
+            this.$store.commit('updateStorage')
         },
         increase(id) {
             this.$store.commit('increase', id)
-            this.$store.commit('updateTotal')
+            this.$store.commit('updateStorage')
         },
         removeFromCart(id) {
             this.$store.commit('removeFromCart', id)
-            this.$store.commit('updateTotal')
+            this.$store.commit('updateStorage')
         }
     }
 }

@@ -21,7 +21,7 @@ export default {
     methods: {
         addToCart(id) {
             this.$store.commit('addToCart', id)
-            this.$store.commit('updateTotal')
+            this.$store.commit('updateStorage')
         }
     }
 }

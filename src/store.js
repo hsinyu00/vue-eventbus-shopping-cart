@@ -72,7 +72,7 @@ export const store = new Vuex.Store({
     loadSuccess(state, data) {
       state.products = data
     },
-    recoverCart(state) {
+    loadCart(state) {
       state.cart = JSON.parse(localStorage['cart'])
     }
   },
