@@ -32,7 +32,6 @@
 </template>
 
 <script>
-import {mapMutations} from 'vuex'
 export default {
     computed: {
         cart() {
@@ -42,18 +41,24 @@ export default {
             return this.$store.getters.updateTotal;
         }
     },
+    watch: {
+        cart: {
+            deep: true,
+            handler: (val, old) => {
+                console.log(val)
+                localStorage['cart'] = JSON.stringify(val)
+            }
+        }
+    },
     methods: {
         decrease(id) {
             this.$store.commit('decrease', id)
-            this.$store.commit('updateStorage')
         },
         increase(id) {
             this.$store.commit('increase', id)
-            this.$store.commit('updateStorage')
         },
         removeFromCart(id) {
             this.$store.commit('removeFromCart', id)
-            this.$store.commit('updateStorage')
         }
     }
 }

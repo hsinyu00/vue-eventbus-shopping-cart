@@ -61,9 +61,6 @@ export const store = new Vuex.Store({
       state.cart[target].qty = state.cart[target].qty + 1
       Vue.set(state.cart, target, state.cart[target])
     },
-    updateStorage(state) {
-      localStorage['cart'] = JSON.stringify(state.cart)
-    },
     emptyCart(state) {
       if (confirm("Empty cart?")) {
         state.cart = []

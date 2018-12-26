@@ -19,7 +19,6 @@ export default {
     methods: {
         emptyCart() {
             this.$store.commit('emptyCart')
-            this.$store.commit('updateStorage')
         }
     },
     components: {
