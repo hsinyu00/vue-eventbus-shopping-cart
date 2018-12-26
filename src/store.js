@@ -8,7 +8,19 @@ export const store = new Vuex.Store({
   state: {
     products: [],
     cart: [],
-    total: 0
+  },
+  getters: {
+    updateTotal(state) {
+      if(state.cart.length > 0) {
+        let total = state.cart.map(function(obj) {
+            let sub = obj.price * obj.qty
+            return sub
+        }).reduce(function(result, sub) {
+            return result + sub
+        })
+        return total
+      }
+    }
   },
   mutations: {
     addToCart(state, id) {
@@ -48,17 +60,6 @@ export const store = new Vuex.Store({
       let target = state.cart.map(function(item) { return item.id; }).indexOf(id)
       state.cart[target].qty = state.cart[target].qty + 1
       Vue.set(state.cart, target, state.cart[target])
-    },
-    updateTotal(state) {
-      if(state.cart.length > 0) {
-        let total = state.cart.map(function(obj) {
-            let sub = obj.price * obj.qty
-            return sub
-        }).reduce(function(result, sub) {
-            return result + sub
-        })
-        state.total = total
-      }
     },
     updateStorage(state) {
       localStorage['cart'] = JSON.stringify(state.cart)
